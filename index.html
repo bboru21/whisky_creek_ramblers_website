@@ -75,6 +75,7 @@
                     </div>
                     <div class="carousel-item">
                         <h1>affiliations</h1>
+                        <p>We also have several other side-projects and collaborations. Check out our 50's/60's/70's cover band <a href="http://threestrikesband.com" target="_bank">Three Strikes</a>.</p>
                     </div>
                 </div>
             </div>
@@ -98,7 +99,7 @@
 
         const $MENU_BUTTONS = $(".menu button");
         const $setListTable = $(".set-list-table");
-        const $setListTbody = $setListTable.next("tbody");
+        const $setListTbody = $setListTable.children("tbody");
 
         // TODO move this into a JSON file loaded via fetch
         const setList = {
@@ -113,10 +114,19 @@
                 { "title": "Supicious Minds", "artist": "Elvis" },
                 { "title": "Centerfield", "artist": "John Fogerty" },
                 { "title": "I Won't Back Down", "artist": "Tom Petty" },
+                { "title": "American Girl", "artist": "Tom Petty & The Heartbreakers" },
+                { "title": "Amsterdam", "artist": "Guster" },
+                { "title": "Careful", "artist": "Guster" },
+                { "title": "Friend of the Devil", "artist": "The Grateful Dead" },
+                { "title": "Wagon Wheel	", "artist": "Old Crow Medicine Show" },
+                { "title": "Weight of Lies", "artist": "The Avett Brothers" },
+                { "title": "Wildflowers", "artist": "Tom Petty" },
+                { "title": "Turnaround", "artist": "Deep Creek Bookends" }
             ]
         };
 
         function renderSetList(sortBy) {
+
             sortBy = typeof sortBy==="undefined" ? "title" : sortBy;
             $setListTbody.html("");
 
@@ -133,9 +143,22 @@
                 return (v1 < v2) ? -1 : 1;
             });
 
+            data.forEach((item) => {
+                $row = $(`
+                    <tr>
+                        <td>${item.title}</td>
+                        <td>${item.artist}</td>
+                    </tr>
+                `);
+
+                $setListTbody.append($row);
+            });
+
             // TODO build out list
 
         }
+
+        renderSetList();
 
         function handleMenuButtonClick(event) {
             event.preventDefault();

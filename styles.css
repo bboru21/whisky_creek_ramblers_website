@@ -4,6 +4,7 @@
   --gray: #8e8e8e;
   --white: #FFF;
 
+  --content-padding: 1rem;
   --footer-height: 60px;
 
     /*
@@ -78,7 +79,7 @@ body {
 .content {
   padding: var(--content-padding);
   padding-bottom: var(--footer-height);
-  padding: 1rem;
+
 }
 
 footer {
