@@ -58,12 +58,16 @@ body {
   color: #FFF;
 }
 
+.menu {
+  padding: var(--content-padding);
+}
 .menu ul {
   padding-left: 0;
 }
 .menu li {
   list-style: none;
   display: inline-block;
+  margin-right: 0.5rem;
 }
 
 .menu button.active {
@@ -83,6 +87,7 @@ body {
 }
 
 footer {
+  display: flex;
   background-color: var(--black);
   height: 75px;
   width: 100%;
@@ -95,6 +100,8 @@ footer {
 }
 .footer-content {
   padding: 0.5rem;
+  display: flex;
+  align-items: center;
 }
 
 @media (min-width: 576px) {
