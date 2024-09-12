@@ -78,12 +78,12 @@ body {
   position: relative;
   min-height: 100vh;
   background-color: #FFF;
+  box-shadow: 0px 0px 8px #999;
 }
 
 .content {
   padding: var(--content-padding);
   padding-bottom: var(--footer-height);
-
 }
 
 footer {
