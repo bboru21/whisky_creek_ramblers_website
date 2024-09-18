@@ -92,6 +92,9 @@ body {
   margin-left: 0.5rem;
   display: inline-block;
 }
+#set-list-table th button.active.reverse .label::after {
+  content: "▲";
+}
 
 footer {
   display: flex;

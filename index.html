@@ -61,7 +61,7 @@
                                 <thead>
                                 <tr>
                                     <th>
-                                    <button class="unstyled-button active" data-sort="title">
+                                    <button class="unstyled-button active" data-sort="-title">
                                         <span class="label">Song</span>
                                     </button>
                                     </th>
@@ -104,22 +104,29 @@
         const SORT_BUTTONS = document.querySelectorAll("#set-list-table thead th button");
         let SET_LIST_DATA = {};
 
-        function renderSetList(sortBy) {
+        function renderSetList(sortByParam) {
 
-            sortBy = typeof sortBy==="undefined" ? "title" : sortBy;
+            const sortBy = typeof sortByParam==="undefined" ? "title" : sortByParam;
+            const reverse = sortBy.startsWith('-');
+
             SET_LIST_TBODY.innerHTML = "";
 
             const data = SET_LIST_DATA.data || [];
+            const key = sortBy.replace(/[^a-z]/ig, "");
 
             data.sort(function (a, b) {
                 /* theoretically should never be equal and have to return 0 */
 
                 // ignore "The"
                 const toIgnore = new RegExp(/^the\s/i);
-                const v1 = a[sortBy].replace(toIgnore, '');
-                const v2 = b[sortBy].replace(toIgnore, '');
+                const v1 = a[key].replace(toIgnore, '');
+                const v2 = b[key].replace(toIgnore, '');
 
-                return (v1 < v2) ? -1 : 1;
+                if (reverse) {
+                    return (v1 > v2) ? -1 : 1;
+                } else {
+                    return (v1 < v2) ? -1 : 1;
+                }
             });
 
             data.forEach((item) => {
@@ -150,14 +157,24 @@
 
         function handleSortButtonClick(button) {
 
+            const sortBy = button.dataset.sort;
+            renderSetList(sortBy);
+
             // remove active class for array styling
             Array.prototype.forEach.call(SORT_BUTTONS, function(node) {
                 node.classList.remove("active");
+                node.classList.remove("reverse");
             });
+
+            if (sortBy.startsWith('-')) {
+                button.dataset.sort = sortBy.substr(1);
+                button.classList.add("reverse");
+            } else {
+                button.dataset.sort = `-${sortBy}`;
+
+            }
             button.classList.add("active");
 
-            const sortBy = button.dataset.sort;
-            renderSetList(sortBy);
         }
         Array.prototype.forEach.call(document.querySelectorAll("#set-list-table thead th button"), function(node) {
           node.addEventListener("click", function() { handleSortButtonClick(node); });
