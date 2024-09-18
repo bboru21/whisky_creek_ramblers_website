@@ -57,7 +57,7 @@
                     <div class="carousel-item">
                         <h1>songs</h1>
 
-                            <table class="table table-striped set-list-table">
+                            <table id="set-list-table" class="table table-striped">
                                 <thead>
                                 <tr>
                                     <th>
@@ -91,7 +91,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
-
     <script>
     (function(bootstrap) {
 
@@ -101,54 +100,16 @@
         );
 
         const MENU_BUTTONS = document.querySelectorAll(".menu button");
-        const SET_LIST_TBODY = document.querySelector(".set-list-table tbody");
-
-        // TODO move this into a JSON file loaded via fetch
-        const setList = {
-            "data": [
-                { "title": "Brown Eyed Girl", "artist": "Van Morrison" },
-                { "title": "Hello Mary Lou (Goodbye Heart)", "artist": "Ricky Nelson" },
-                { "title": "I Don't Want to Spoil the Party", "artist": "The Beatles" },
-                { "title": "I Fought the Law", "artist": "The Bobby Fuller Four", "songURL": "https://youtu.be/PHDqZSkmXlk" },
-                { "title": "I'll Follow The Sun", "artist": "The Beatles" },
-                { "title": "Me and Julio Down by the Schoolyard", "artist": "Paul Simon" },
-                { "title": "Runaway", "artist": "Del Shannon" },
-                { "title": "Supicious Minds", "artist": "Elvis" },
-                { "title": "Centerfield", "artist": "John Fogerty" },
-                { "title": "I Won't Back Down", "artist": "Tom Petty" },
-                { "title": "American Girl", "artist": "Tom Petty & The Heartbreakers" },
-                { "title": "Amsterdam", "artist": "Guster" },
-                { "title": "Careful", "artist": "Guster" },
-                { "title": "Friend of the Devil", "artist": "The Grateful Dead" },
-                { "title": "Wagon Wheel	", "artist": "Old Crow Medicine Show" },
-                { "title": "Weight of Lies", "artist": "The Avett Brothers" },
-                { "title": "Wildflowers", "artist": "Tom Petty" },
-                { "title": "Turnaround", "artist": "Original" },
-                { "title": "The Old Shenando'", "artist": "Harold Welch" },
-                { "title": "Go To Sleep ", "artist": "The Avett Brothers" },
-                { "title": "Dance, Dance, Dance", "artist": "The Steve Miller Band" },
-                { "title": "Harvest Moon", "artist": "Neil Young" },
-                { "title": "I Will Wait", "artist": "Mumford and Sons" },
-                { "title": "Winter Winds", "artist": "Mumford and Sons" },
-                { "title": "Rainy Night In Soho", "artist": "The Pogues" },
-                { "title": "You Ain't Goin Nowhere", "artist": "Bob Dylan" },
-                { "title": "You're Wildest Dreams", "artist": "The Moody Blues" },
-                { "title": "This Side", "artist": "Nickel Creek" },
-                { "title": "Mama Tried", "artist": "Merle Haggard" },
-                { "title": "Cry Love", "artist": "John Haitt" },
-                { "title": "Thunder Road", "artist": "Bruce Springsteen" },
-                { "title": "Don't Carry It All", "artist": "The Decemberists" },
-                { "title": "Old Ties and Companions", "artist": "Watchhouse" },
-                { "title": "Atlantic City", "artist": "Bruce Springsteen" }
-            ]
-        };
+        const SET_LIST_TBODY = document.querySelector("#set-list-table tbody");
+        const SORT_BUTTONS = document.querySelectorAll("#set-list-table thead th button");
+        let SET_LIST_DATA = {};
 
         function renderSetList(sortBy) {
 
             sortBy = typeof sortBy==="undefined" ? "title" : sortBy;
             SET_LIST_TBODY.innerHTML = "";
 
-            const data = setList.data;
+            const data = SET_LIST_DATA.data || [];
 
             data.sort(function (a, b) {
                 /* theoretically should never be equal and have to return 0 */
@@ -173,12 +134,34 @@
                 row.appendChild(col2);
                 SET_LIST_TBODY.appendChild(row);
             });
-
-            // TODO build out list
-
         }
 
-        renderSetList();
+        // fetch the set list
+        fetch('./setlist.json').then((resp) => {
+            if (resp.status === 200) {
+                return resp.json();
+            } else {
+                console.error(resp.statusText);
+            }
+        }).then((data) => {
+            SET_LIST_DATA = data;
+            renderSetList();
+        });
+
+        function handleSortButtonClick(button) {
+
+            // remove active class for array styling
+            Array.prototype.forEach.call(SORT_BUTTONS, function(node) {
+                node.classList.remove("active");
+            });
+            button.classList.add("active");
+
+            const sortBy = button.dataset.sort;
+            renderSetList(sortBy);
+        }
+        Array.prototype.forEach.call(document.querySelectorAll("#set-list-table thead th button"), function(node) {
+          node.addEventListener("click", function() { handleSortButtonClick(node); });
+        });
 
         function handleMenuButtonClick(event) {
             event.preventDefault();

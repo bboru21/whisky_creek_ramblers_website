@@ -86,6 +86,13 @@ body {
   padding-bottom: var(--footer-height);
 }
 
+#set-list-table th button.active .label::after {
+  content: "▼";
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
+  display: inline-block;
+}
+
 footer {
   display: flex;
   background-color: var(--black);
