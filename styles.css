@@ -50,12 +50,26 @@ body {
 }
 
 .header-content {
-  padding: 0.5rem;
+  padding: 0.5rem 1.0rem;
+
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
 }
 
 .logo {
   width: 300px;
   color: #FFF;
+  display: flex;
+}
+
+.social-icons {
+  display: flex;
+  align-items: center;;
+}
+
+.social-icons img {
+  width: 1.5rem;
 }
 
 .menu {
