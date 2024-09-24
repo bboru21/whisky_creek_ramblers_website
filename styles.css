@@ -99,7 +99,7 @@ body {
 }
 .header-image {
   position: absolute;
-  background-image: url("assets/images/roadside-jam-sepiatone.jpg");
+  background-image: url("assets/images/roadside-jam-sepiatone-dim.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
