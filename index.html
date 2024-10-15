@@ -158,10 +158,10 @@
             data.forEach((item) => {
                 const row = document.createElement("tr");
                 const col1 = document.createElement("td");
-                col1.innerHTML = item.title
+                col1.innerHTML = item.songURL ? `<a href="${item.songURL}" target="_blank">${item.title}</a>` : item.title;
 
                 const col2 = document.createElement("td");
-                col2.innerHTML = item.artist;
+                col2.innerHTML = item.artistURL ? `<a href="${item.artistURL}" target="_blank">${item.artist}</a>` : item.artist;
 
                 row.appendChild(col1);
                 row.appendChild(col2);
