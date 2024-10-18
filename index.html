@@ -44,7 +44,7 @@
         <nav class="menu fs-4">
             <ul class="mb-0">
                 <li>
-                    <button class="unstyled-button active" data-menu-index="0">
+                    <button class="unstyled-button" data-menu-index="0">
                         about
                     </button>
                 </li>
@@ -71,7 +71,7 @@
 
             <div id="pageCarousel" class="carousel slide">
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
+                    <div class="carousel-item">
                         <h1>about</h1>
 
                         <p>The Whisky Creek Ramblers are Jeff Sciscilo and Bryan Hadro, two musicians from Northern Virginia area who have been playing together for nearly 25 years.</p>
@@ -120,15 +120,44 @@
     <script>
     (function(bootstrap) {
 
+        const MENU_HASHES = ["#about", "#songs", "#affiliations"];
+        const MENU_BUTTONS = document.querySelectorAll(".menu button");
+        const SET_LIST_TBODY = document.querySelector("#set-list-table tbody");
+        const SORT_BUTTONS = document.querySelectorAll("#set-list-table thead th button");
+        const CAROUSEL_ITEMS = document.querySelectorAll("#pageCarousel .carousel-item");
+        let SET_LIST_DATA = {};
+
+        (function setupPages() {
+            const hash = window.location.hash;
+
+            let pageIndex = MENU_HASHES.indexOf(hash);
+            pageIndex = (pageIndex === -1) ? 0 : pageIndex;
+
+            // apply .active class to appropriate menu button
+            Array.prototype.forEach.call(MENU_BUTTONS, function (item, i) {
+                if (i===pageIndex) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+
+            // apply .active class to appropriate carousel item
+            Array.prototype.forEach.call(CAROUSEL_ITEMS, function (item, i) {
+                console.log(item, i)
+                if (i === pageIndex) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        })();
+
+        // init the page carousel
         const CAROUSEL = new bootstrap.Carousel(
             document.querySelector('#pageCarousel'),
             { "interval": false }
         );
-
-        const MENU_BUTTONS = document.querySelectorAll(".menu button");
-        const SET_LIST_TBODY = document.querySelector("#set-list-table tbody");
-        const SORT_BUTTONS = document.querySelectorAll("#set-list-table thead th button");
-        let SET_LIST_DATA = {};
 
         function renderSetList(sortByParam) {
 
@@ -208,20 +237,19 @@
 
         function handleMenuButtonClick(event) {
             event.preventDefault();
-
             const button = event.target;
+            const pageIndex = parseInt(button.dataset.menuIndex);
 
-            const i = parseInt(button.dataset.menuIndex);
-
-            CAROUSEL.to(i);
+            CAROUSEL.to(pageIndex);
+            window.location.hash = MENU_HASHES[pageIndex];
 
             document.querySelector(".menu button.active").classList.remove("active");
-            button.classList.add("active");
+            document.querySelector(`button[data-menu-index='${pageIndex}']`).classList.add("active");
         }
+
         Array.prototype.forEach.call(MENU_BUTTONS, (item) => {
             item.addEventListener("click", handleMenuButtonClick);
-        })
-
+        });
 
     }(bootstrap));
     </script>
