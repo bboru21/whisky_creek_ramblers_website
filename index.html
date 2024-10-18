@@ -199,7 +199,7 @@
         }
 
         // fetch the set list
-        fetch('./setlist.json').then((resp) => {
+        fetch('./setlist.json?c=20241015').then((resp) => {
             if (resp.status === 200) {
                 return resp.json();
             } else {
